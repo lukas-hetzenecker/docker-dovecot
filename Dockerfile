@@ -9,7 +9,7 @@ RUN apt-get update
 
 # Install
 RUN apt-get -y install supervisor
-RUN apt-get -y install dovecot-core dovecot-imapd dovecot-managesieved dovecot-sieve 
+RUN apt-get -y install dovecot-core dovecot-imapd dovecot-managesieved dovecot-sieve dovecot-ldap
 RUN rm -rf /etc/dovecot/*conf*
 RUN touch /etc/dovecot/dovecot.conf
 
