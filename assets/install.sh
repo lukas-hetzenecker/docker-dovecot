@@ -31,6 +31,9 @@ chmod +x /opt/dovecot.sh
 #  configuration
 ################
 
+groupadd -g 1200 vmail
+useradd -u 1200 -g 1200 -s /sbin/nologin vmail
+chown vmail:vmail /var/mail
 
 cat >> /etc/dovecot/dovecot.conf <<EOF
 mail_location = maildir:~/
