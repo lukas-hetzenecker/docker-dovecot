@@ -75,17 +75,21 @@ service imap-login {
 }
 service lmtp {
   inet_listener lmtp {
-    address = $LMTP_HOSTS 127.0.0.1 ::1
+    address = $(hostname -i ) 127.0.0.1 ::1
     port = 24
   }
   user = vmail
+}
+protocol lmtp {
+  mail_plugins = sieve
+  postmaster_address = postmaster@%d
 }
 ssl = required
 ssl_cert = <$(find /etc/dovecot/certs -iname *.crt)
 ssl_key = <$(find /etc/dovecot/certs -iname *.key)
 ssl_ca = <$(find /etc/dovecot/certs -iname cacert.pem)
 userdb {
-  args = uid=vmail gid=vmail home=/var/mail/%u
+  args = uid=vmail gid=vmail home=/var/mail/%n allow_all_users=yes
   driver = static
 }
 EOF
