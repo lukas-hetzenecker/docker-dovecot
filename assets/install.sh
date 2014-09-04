@@ -63,7 +63,7 @@ plugin {
   sieve = ~/.dovecot.sieve
   sieve_dir = ~/sieve
 }
-protocols = imap sieve
+protocols = imap lmtp sieve
 service imap-login {
   inet_listener imap {
     port = 143
@@ -72,6 +72,13 @@ service imap-login {
     port = 993
     ssl = yes
   }
+}
+service lmtp {
+  inet_listener lmtp {
+    address = $LMTP_HOSTS 127.0.0.1 ::1
+    port = 24
+  }
+  user = vmail
 }
 ssl = required
 ssl_cert = <$(find /etc/dovecot/certs -iname *.crt)
