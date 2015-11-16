@@ -88,10 +88,6 @@ ssl = required
 ssl_cert = <$(find /etc/dovecot/certs -iname *.crt)
 ssl_key = <$(find /etc/dovecot/certs -iname *.key)
 ssl_ca = <$(find /etc/dovecot/certs -iname cacert.pem)
-userdb {
-  args = uid=vmail gid=vmail home=/var/mail/%n allow_all_users=yes
-  driver = static
-}
 EOF
 
 if [[ -n "$LDAP_HOST" && -n "$LDAP_BASE" ]]; then
@@ -116,3 +112,27 @@ EOF
 
 fi
 
+if [[ -n "$AUTH_INET_PORT" ]]; then
+  cat >> /etc/dovecot/inet.conf <<EOF
+service auth {
+ inet_listener {
+   port = $AUTH_INET_PORT
+ }
+}
+EOF
+
+fi
+
+
+if [[ -n "$USERDB_FILE" && -n "$PASSDB_FILE" ]]; then
+  cat >> /etc/dovecot/passwd.conf <<EOF
+passdb {
+  driver = passwd-file
+  args = scheme=plain-md5 username_format=%n $PASSDB_FILE
+}
+userdb {
+  driver = passwd-file
+  args = username_format=%n $PASSDB_FILE
+  default_fields = uid=vmail gid=vmail home=/var/mail/%d/%n
+}
+EOF
