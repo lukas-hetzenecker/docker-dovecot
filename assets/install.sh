@@ -113,7 +113,7 @@ EOF
 fi
 
 if [[ -n "$AUTH_INET_PORT" ]]; then
-  cat >> /etc/dovecot/inet.conf <<EOF
+  cat >> /etc/dovecot/dovecot.conf <<EOF
 service auth {
  inet_listener {
    port = $AUTH_INET_PORT
@@ -125,7 +125,7 @@ fi
 
 
 if [[ -n "$USERDB_FILE" && -n "$PASSDB_FILE" ]]; then
-  cat >> /etc/dovecot/passwd.conf <<EOF
+  cat >> /etc/dovecot/dovecot.conf <<EOF
 passdb {
   driver = passwd-file
   args = scheme=plain-md5 username_format=%n $PASSDB_FILE
@@ -136,3 +136,5 @@ userdb {
   default_fields = uid=vmail gid=vmail home=/var/mail/%d/%n
 }
 EOF
+
+fi

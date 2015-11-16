@@ -15,6 +15,7 @@ RUN touch /etc/dovecot/dovecot.conf
 
 # Add files
 ADD assets/install.sh /opt/install.sh
+RUN chmod +x /opt/install.sh
 
 # Run
 CMD /opt/install.sh;/usr/bin/supervisord -c /etc/supervisor/supervisord.conf
