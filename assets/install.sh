@@ -13,6 +13,9 @@ nodaemon=true
 [program:dovecot]
 command=/opt/dovecot.sh
 
+[program:postfix]
+command=/opt/postfix.sh
+
 [program:rsyslog]
 command=/usr/sbin/rsyslogd -n -c3
 EOF
@@ -27,6 +30,16 @@ tail -f /var/log/mail.log
 EOF
 chmod +x /opt/dovecot.sh
 
+############
+#  postfix
+############
+cat >> /opt/postfix.sh <<EOF
+#!/bin/bash
+service postfix start
+tail -f /var/log/mail.log
+EOF
+chmod +x /opt/postfix.sh
+
 ################
 #  configuration
 ################
@@ -34,6 +47,11 @@ chmod +x /opt/dovecot.sh
 groupadd -g 1200 vmail
 useradd -u 1200 -g 1200 -s /sbin/nologin vmail
 chown vmail:vmail /var/mail
+
+# mail relay
+if [[ -n "$MAIL_RELAY" ]]; then 
+   postconf -e "relayhost = $MAIL_RELAY"
+fi
 
 cat >> /etc/dovecot/dovecot.conf <<EOF
 mail_location = maildir:~/

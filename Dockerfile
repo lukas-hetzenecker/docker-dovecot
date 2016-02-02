@@ -10,6 +10,7 @@ RUN apt-get update
 # Install
 RUN apt-get -y install supervisor
 RUN apt-get -y install dovecot-core dovecot-imapd dovecot-lmtpd dovecot-managesieved dovecot-sieve dovecot-ldap
+RUN apt-get -y install postfix
 RUN rm -rf /etc/dovecot/*conf*
 RUN touch /etc/dovecot/dovecot.conf
 
